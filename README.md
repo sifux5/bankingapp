@@ -3,7 +3,8 @@
 A full-stack banking application built with Spring Boot and React, featuring secure JWT authentication, account management, and transaction tracking.
 
 ## 🚀 Live Demo
-> Coming soon
+🌐 **Frontend:** [https://deluxe-liger-f29058.netlify.app](https://deluxe-liger-f29058.netlify.app)
+⚙️ **Backend:** [https://bankingapp-6ox5.onrender.com](https://bankingapp-6ox5.onrender.com)
 
 ## ✨ Features
 
