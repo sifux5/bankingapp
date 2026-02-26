@@ -1,30 +1,10 @@
 import { useState, useEffect } from 'react';
 import { authAPI, accountAPI, transactionAPI } from './services/api';
-import type { LoginResponse } from './types';
+import type { LoginResponse, Transaction, Account } from './types';
 import { toast } from 'react-toastify';
 import TransactionChart from './components/TransactionChart';
 import Profile from './pages/Profile';
 import jsPDF from 'jspdf';
-
-interface Account {
-  id: number;
-  accountNumber: string;
-  accountType: 'CHECKING' | 'SAVINGS';
-  balance: number;
-  active: boolean;
-  createdAt: string;
-}
-
-interface Transaction {
-  id: number;
-  fromAccountNumber: string | null;
-  toAccountNumber: string | null;
-  amount: number;
-  transactionType: 'DEPOSIT' | 'WITHDRAWAL' | 'TRANSFER';
-  status: string;
-  description: string;
-  createdAt: string;
-}
 
 // Dark mode hook
 function useDarkMode() {
@@ -243,7 +223,7 @@ function App() {
     try {
       await accountAPI.createAccount(user.email, type);
       await loadAccounts();
-      toast.success(`${type} account created successfully!`, { icon: '💳' });
+      toast.success(`${type} account created successfully!`);
     } catch (error) {
       toast.error('Failed to create account');
     }
@@ -255,7 +235,7 @@ function App() {
 
     try {
       await transactionAPI.deposit(selectedAccount.accountNumber, parseFloat(modalAmount), modalDescription || 'Deposit');
-      toast.success(`€${modalAmount} deposited successfully!`, { icon: '💰' });
+      toast.success(`€${modalAmount} deposited successfully!`);
       setShowDepositModal(false);
       setModalAmount('');
       setModalDescription('');
@@ -272,13 +252,13 @@ function App() {
 
     const numAmount = parseFloat(modalAmount);
     if (numAmount > selectedAccount.balance) {
-      toast.error('Insufficient funds!', { icon: '⚠️' });
+      toast.error('Insufficient funds!');
       return;
     }
 
     try {
       await transactionAPI.withdraw(selectedAccount.accountNumber, numAmount, modalDescription || 'Withdrawal');
-      toast.success(`€${modalAmount} withdrawn successfully!`, { icon: '💵' });
+      toast.success(`€${modalAmount} withdrawn successfully!`);
       setShowWithdrawModal(false);
       setModalAmount('');
       setModalDescription('');
@@ -300,7 +280,7 @@ function App() {
         amount: parseFloat(transferData.amount),
         description: transferData.description,
       });
-      toast.success('Transfer successful!', { icon: '✅' });
+      toast.success('Transfer successful!');
       setShowTransfer(false);
       setTransferData({ toAccountNumber: '', amount: '', description: '' });
       await loadAccounts();
