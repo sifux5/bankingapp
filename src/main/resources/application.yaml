@@ -3,14 +3,14 @@ spring:
     name: BankingApp
 
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5432/bankingapp
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://127.0.0.1:5432/bankingapp}
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: password
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
     show-sql: true
     properties:
       hibernate:
@@ -18,4 +18,4 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
-  port: 8080
+  port: ${PORT:8080}
