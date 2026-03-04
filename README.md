@@ -3,8 +3,8 @@
 A full-stack banking application built with Spring Boot and React, featuring secure JWT authentication, account management, and transaction tracking.
 
 ## 🚀 Live Demo
-🌐 **Frontend:** [https://deluxe-liger-f29058.netlify.app](https://deluxe-liger-f29058.netlify.app)
-⚙️ **Backend:** [https://bankingapp-6ox5.onrender.com](https://bankingapp-6ox5.onrender.com)
+- **Frontend:** https://deluxe-liger-f29058.netlify.app
+- **Backend API:** https://bankingapp-6ox5.onrender.com
 
 ## ✨ Features
 
@@ -64,7 +64,7 @@ A full-stack banking application built with Spring Boot and React, featuring sec
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/bankingapp.git
+git clone https://github.com/sifux5/bankingapp.git
 cd bankingapp
 ```
 
@@ -89,7 +89,6 @@ npm run dev
 Navigate to `http://localhost:5173`
 
 ## 🗄️ Database Schema
-
 ```
 users
   - id, first_name, last_name, email, password, phone_number, created_at, updated_at
@@ -109,7 +108,6 @@ transactions
 - CORS configured for frontend origin
 
 ## 📁 Project Structure
-
 ```
 bankingapp/
 ├── src/main/java/com/banking/bankingapp/
@@ -117,19 +115,25 @@ bankingapp/
 │   ├── controller/      # REST controllers
 │   ├── dto/             # Data Transfer Objects
 │   ├── entity/          # JPA entities
+│   ├── mapper/          # DTO conversion (AccountMapper, TransactionMapper)
 │   ├── repository/      # Spring Data repositories
 │   ├── service/         # Business logic
 │   └── util/            # JWT utility
 ├── banking-frontend/
 │   ├── src/
-│   │   ├── pages/       # Login, Register, Dashboard, Profile
+│   │   ├── pages/       # Landing, Login, Register, Profile
 │   │   ├── services/    # API calls
 │   │   ├── components/  # Reusable components
+│   │   │   └── modals/  # Modal components (Deposit, Withdraw, AccountDetail)
 │   │   └── types/       # TypeScript interfaces
 │   └── public/
 ├── docker-compose.yml
 └── README.md
 ```
+
+## 🧪 Tests
+- Unit tests for `AccountMapper` and `TransactionMapper`
+- Run with: `./mvnw test`
 
 ## 👤 Author
 Alex Kupper
