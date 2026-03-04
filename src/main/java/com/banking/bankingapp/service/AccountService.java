@@ -4,6 +4,7 @@ import com.banking.bankingapp.dto.AccountResponse;
 import com.banking.bankingapp.entity.Account;
 import com.banking.bankingapp.entity.AccountType;
 import com.banking.bankingapp.entity.User;
+import com.banking.bankingapp.mapper.AccountMapper;
 import com.banking.bankingapp.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final AccountMapper accountMapper;
 
     @Transactional
     public AccountResponse createAccount(User user, AccountType accountType) {
@@ -29,14 +31,13 @@ public class AccountService {
         account.setUser(user);
         account.setActive(true);
 
-        Account savedAccount = accountRepository.save(account);
-        return mapToResponse(savedAccount);
+        return accountMapper.toResponse(accountRepository.save(account));
     }
 
     public List<AccountResponse> getUserAccounts(User user) {
         return accountRepository.findByUserAndActiveTrue(user)
                 .stream()
-                .map(this::mapToResponse)
+                .map(accountMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
@@ -46,19 +47,14 @@ public class AccountService {
     }
 
     public AccountResponse getAccountBalance(String accountNumber) {
-        Account account = findByAccountNumber(accountNumber);
-        return mapToResponse(account);
+        return accountMapper.toResponse(findByAccountNumber(accountNumber));
     }
 
     @Transactional
     public void deactivateAccount(String accountNumber) {
         Account account = findByAccountNumber(accountNumber);
-        if (!account.isActive()) {
-            throw new RuntimeException("Account is already inactive");
-        }
-        if (account.getBalance().compareTo(BigDecimal.ZERO) > 0) {
-            throw new RuntimeException("Cannot close account with remaining balance");
-        }
+        if (!account.isActive()) throw new RuntimeException("Account is already inactive");
+        if (account.getBalance().compareTo(BigDecimal.ZERO) > 0) throw new RuntimeException("Cannot close account with remaining balance");
         account.setActive(false);
         accountRepository.save(account);
     }
@@ -70,16 +66,5 @@ public class AccountService {
             accountNumber = String.format("%010d", random.nextInt(1000000000));
         } while (accountRepository.existsByAccountNumber(accountNumber));
         return accountNumber;
-    }
-
-    private AccountResponse mapToResponse(Account account) {
-        return new AccountResponse(
-                account.getId(),
-                account.getAccountNumber(),
-                account.getAccountType(),
-                account.getBalance(),
-                account.isActive(),
-                account.getCreatedAt()
-        );
     }
 }
